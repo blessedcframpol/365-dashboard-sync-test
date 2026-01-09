@@ -1,0 +1,19 @@
+name: Sync Microsoft Graph Data
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Sync Endpoint
+        run: |
+          curl -X POST "${{ secrets.SYNC_ENDPOINT_URL }}?type=full&secret=${{ secrets.CRON_SECRET }}"
+        env:
+          SYNC_ENDPOINT_URL: ${{ secrets.SYNC_ENDPOINT_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
